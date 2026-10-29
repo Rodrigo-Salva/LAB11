@@ -1,0 +1,78 @@
+﻿@model Eventos.Web.Repositorios.ResumenInicio
+@{
+    ViewData["Title"] = "Inicio";
+    var gradientes = new[] { "bg-g1", "bg-g2", "bg-g3" };
+}
+
+<section class="hero">
+    
+    <h1>Organiza eventos.<br />Gestiona inscripciones.</h1>
+    <p>Controla aforos, asistentes y cupos disponibles en un solo lugar, de forma simple y rápida.</p>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+        <a asp-controller="Eventos" asp-action="Index" class="btn btn-light btn-lg"><i class="bi bi-calendar3 me-2"></i>Ver eventos</a>
+        <a asp-controller="Inscripciones" asp-action="Create" class="btn btn-outline-light btn-lg"><i class="bi bi-ticket-perforated me-2"></i>Nueva inscripción</a>
+    </div>
+</section>
+
+<div class="row g-3 mt-3">
+    <div class="col-6 col-lg-3">
+        <div class="stat-card"><div class="stat-icon bg-g1"><i class="bi bi-calendar-event"></i></div>
+            <div><div class="num">@Model.Eventos</div><div class="lbl">Eventos activos</div></div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-card"><div class="stat-icon bg-g2"><i class="bi bi-people"></i></div>
+            <div><div class="num">@Model.Asistentes</div><div class="lbl">Asistentes</div></div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-card"><div class="stat-icon bg-g3"><i class="bi bi-ticket-perforated"></i></div>
+            <div><div class="num">@Model.Inscripciones</div><div class="lbl">Inscripciones confirmadas</div></div></div>
+    </div>
+    <div class="col-6 col-lg-3">
+        <div class="stat-card"><div class="stat-icon bg-g4"><i class="bi bi-tags"></i></div>
+            <div><div class="num">@Model.Categorias</div><div class="lbl">Categorías</div></div></div>
+    </div>
+</div>
+
+<h2 class="section-title">Próximos eventos</h2>
+<div class="row g-3">
+    @if (!Model.Proximos.Any())
+    {
+        <p class="text-muted">No hay eventos próximos.</p>
+    }
+    @for (int i = 0; i < Model.Proximos.Count; i++)
+    {
+        var item = Model.Proximos[i];
+        var pct = item.Evento.Aforo == 0 ? 0 : item.Inscritos * 100 / item.Evento.Aforo;
+        <div class="col-md-4">
+            <div class="event-card">
+                <div class="event-top @gradientes[i % 3]">
+                    <span class="badge bg-light text-dark border">@item.Categoria</span>
+                    <div class="event-date">
+                        <b>@item.Evento.Fecha.ToString("dd")</b>
+                        <small>@item.Evento.Fecha.ToString("MMM")</small>
+                    </div>
+                </div>
+                <div class="event-body">
+                    <h5>@item.Evento.Titulo</h5>
+                    <div class="meta mb-1"><i class="bi bi-geo-alt me-1"></i>@item.Evento.Lugar</div>
+                    <div class="meta mb-3">
+                        <i class="bi @(item.Evento.Modalidad == "Virtual" ? "bi-camera-video" : "bi-person-walking") me-1"></i>@item.Evento.Modalidad
+                        · <i class="bi bi-cash-coin me-1"></i>@(item.Evento.Precio == 0 ? "Gratis" : item.Evento.Precio.ToString("C2"))
+                    </div>
+                    <div class="d-flex justify-content-between meta mb-1">
+                        <span>@item.Inscritos inscritos</span><span>@item.Cupos cupos</span>
+                    </div>
+                    <div class="progress"><div class="progress-bar" style="width:@pct%"></div></div>
+                    <a asp-controller="Eventos" asp-action="Details" asp-route-id="@item.Evento.Id" class="btn btn-outline-primary btn-sm mt-3">Ver detalle</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h2 class="section-title">Accesos rápidos</h2>
+<div class="row g-3">
+    <div class="col-md-4"><a class="quick" asp-controller="Eventos" asp-action="Create"><i class="bi bi-plus-circle"></i>Crear evento</a></div>
+    <div class="col-md-4"><a class="quick" asp-controller="Asistentes" asp-action="Create"><i class="bi bi-person-plus"></i>Registrar asistente</a></div>
+    <div class="col-md-4"><a class="quick" asp-controller="Inscripciones" asp-action="Index"><i class="bi bi-list-check"></i>Ver inscripciones</a></div>
+</div>

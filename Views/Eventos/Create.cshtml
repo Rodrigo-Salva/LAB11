@@ -1,0 +1,16 @@
+@model Eventos.Web.Models.Evento
+@{
+    ViewData["Title"] = "Nuevo evento";
+}
+
+<h1>Nuevo evento</h1>
+
+<form asp-action="Create" method="post" class="col-md-6">
+    <partial name="_Form" model="Model" view-data="ViewData" />
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

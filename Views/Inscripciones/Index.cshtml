@@ -1,0 +1,35 @@
+@model List<Eventos.Web.Models.Inscripcion>
+@{
+    ViewData["Title"] = "Inscripciones";
+}
+
+<h1>Inscripciones</h1>
+
+<p><a asp-action="Create" class="btn btn-primary">Nueva inscripción</a></p>
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Evento</th><th>Asistente</th><th>Fecha</th><th>Estado</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model)
+        {
+            <tr>
+                <td>@i.Evento?.Titulo</td>
+                <td>@i.Asistente?.Nombres</td>
+                <td>@i.FechaInscripcion.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>
+                    <span class="badge @(i.Estado == "Confirmada" ? "bg-success" : "bg-secondary")">@i.Estado</span>
+                </td>
+                <td>
+                    @if (i.Estado == "Confirmada")
+                    {
+                        <form asp-action="Cancelar" asp-route-id="@i.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sm btn-outline-danger">Cancelar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

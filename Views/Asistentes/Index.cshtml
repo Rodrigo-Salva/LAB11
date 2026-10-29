@@ -1,0 +1,25 @@
+@model List<Eventos.Web.Models.Asistente>
+@{
+    ViewData["Title"] = "Asistentes";
+}
+
+<h1>Asistentes</h1>
+
+<p><a asp-action="Create" class="btn btn-primary">Nuevo asistente</a></p>
+
+<table class="table table-striped">
+    <thead>
+        <tr><th>Nombres</th><th>DNI</th><th>Correo</th><th>Teléfono</th></tr>
+    </thead>
+    <tbody>
+        @foreach (var a in Model)
+        {
+            <tr>
+                <td>@a.Nombres</td>
+                <td>@a.Dni</td>
+                <td>@a.Correo</td>
+                <td>@a.Telefono</td>
+            </tr>
+        }
+    </tbody>
+</table>
